@@ -3,6 +3,7 @@ The api I developed with Python has 2 end points and uses port 8000. (http://127
 http://api.openweathermap.org/data/2.5/weather i used its API.
 
 GET /
+
 GET /temperature/city/{canakkale}
 
 I have performed Task 1, Task 2 and Task 3. I dockerized the structure with dockerfile. You can run Docker after build.
