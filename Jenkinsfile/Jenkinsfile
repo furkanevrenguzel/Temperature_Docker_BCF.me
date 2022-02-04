@@ -1,0 +1,48 @@
+pipeline
+        {
+           agent any
+           stages
+          {
+           stage("Git SCM")
+                            {
+                                steps
+                                {
+                                    git branch: 'main',
+                                    credentialsId: 'GitHub_credentials',
+                                    url: 'https://github.com/furkanevrenguzel/caseapi'
+                                 }
+                            }
+          stage("Build")
+          {
+            agent
+             {
+                docker 
+                {
+                    image 'python:3.8'
+                }
+             }
+
+            steps
+            {
+                sh "python -m compileall ."
+            }
+          }    
+          stage("Test")
+          {
+            
+            steps
+            {
+                echo "test"
+            }
+          }
+            
+        stage("Run Container")
+        {
+            steps
+            {
+                sh "docker run -v C:/WINDOWS/system32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/ -d -p 8080:8080 -p 50000:50000 --name bcf.me"
+            }
+        }
+    }
+
+}
