@@ -9,7 +9,7 @@ pipeline
                                 {
                                     git branch: 'main',
                                     credentialsId: 'GitHub_credentials',
-                                    url: 'https://github.com/furkanevrenguzel/caseapi'
+                                    url: 'https://github.com/furkanevrenguzel/Temperature_Docker_BCF.me.git'
                                  }
                             }
           stage("Build")
@@ -35,14 +35,29 @@ pipeline
                 echo "test"
             }
           }
-            
-        stage("Run Container")
-        {
+          stage("Build Docker Image")
+            {
+            steps{
+                sh "docker build -t furkanevrenguzel/api:latest ."
+            }
+        }
+          stage ("Push dockerhub")
+                 {
+            steps
+                {
+                withCredentials([string(credentialsId: 'dockerpassid', variable: 'password')]) {
+                    sh "docker login -u ********* -p **********"
+                }
+        
+                sh "docker push furkanevrenguzel/api:latest"
+            }
+        }
+         stage("Run Container")
+         {
             steps
             {
-                sh "docker run -v C:/WINDOWS/system32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/ -d -p 8080:8080 -p 50000:50000 --name bcf.me"
+                sh "docker run -v C:/WINDOWS/system32/config/systemprofile/AppData/Local/Jenkins/.jenkins/workspace/ -d -p 8080:8080 -p 50000:50000 --name bcf.me furkanevrenguzel/api:latest"
             }
         }
     }
-
 }
